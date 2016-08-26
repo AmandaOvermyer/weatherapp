@@ -1,0 +1,65 @@
+* {
+	font-family: 'Bitter', serif;
+}
+
+/************ Splash Screen ************/
+
+.splash-screen > .login {
+	font-size: 18px;
+	margin: 0 auto;
+	display: block;
+	background-color: #156aeb;
+	color: white;
+	width: 200px;
+}
+
+.splash-screen > .login:hover {
+	background-color: #dc4532;
+}
+
+.image {
+	content: url('images/weatherapplogo2.jpg');
+	max-width: 500px;
+	margin: 0 auto;
+
+}
+
+
+
+
+/*********** Calendar Selection ************/
+
+.calendar-selection {
+	display: none;
+}
+
+
+/**************** Calendar View ************/
+
+.calendar-view {
+	display:none;
+	text-align: center;
+}
+
+.sm-image {
+	content: url('images/weatherapplogo2.jpg');
+	max-height: 200px;
+	max-width: 200px;
+	text-align: left;
+
+}
+
+.date {
+	font-size: 18px;
+	margin: 0 auto;
+	
+}
+
+.prec > a {
+	font-size: 14px;
+	color: #bbbaba;
+}
+
+.prec > a:hover {
+	color: #7f7e7e;
+}
