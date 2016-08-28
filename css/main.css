@@ -31,6 +31,8 @@
 
 .calendar-selection {
 	display: none;
+	text-align: center;
+	padding: 15px;
 }
 
 
