@@ -43,6 +43,16 @@
 	text-align: center;
 }
 
+#previous-button {
+	display: block;
+	margin: 0 auto;
+}
+
+#next-button {
+	display: block;
+	margin: 0 auto;
+}
+
 .sm-image {
 	content: url('images/weatherapplogo2.jpg');
 	max-height: 200px;

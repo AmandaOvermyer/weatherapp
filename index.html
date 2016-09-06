@@ -13,8 +13,8 @@
 </div>
 
 <div class="calendar-selection">Calendar Selection
-	<p class="calendar-choices"></p>
-	<button class="calendarchoice js-calendarchoice">Choose Calendar</button>
+	<div class="calendar-choices"></div>
+	
 	<button class="logout js-logout">Log out</button>
 
 </div>
@@ -23,8 +23,10 @@
 
 <div class="calendar-view">
 	<img class="sm-image" alt="google weather app logo">
-	<p class="date"> Friday, August 25 </p>
-	<p class="appointment">2:00pm - Session with Georgie Family @Meadowbrook Park</p>
+	<button type="button" id="previous-button">Previous</button>
+	<div class="date js-date">DATE</div>
+	<button type="button" id="next-button">Next</button>
+	<div class="appointment js-appt"></div>
 	<p class="temp">75 degrees</p>
 	<p class="forecast">partly cloudy</p>
 	<p class="prec">Prec: 25% <a href="">Hourly View</a></p>
