@@ -44,13 +44,25 @@
 }
 
 #previous-button {
-	display: block;
-	margin: 0 auto;
+	display: inline-block;
+	position: relative;
+	width: 0; 
+	height: 0; 
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent; 
+
+	border-right:10px solid black; 
 }
 
 #next-button {
-	display: block;
-	margin: 0 auto;
+	display: inline-block;
+	position: relative;
+	width: 0; 
+	height: 0; 
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+
+	border-left: 10px solid black;
 }
 
 .sm-image {
@@ -58,20 +70,30 @@
 	max-height: 200px;
 	max-width: 200px;
 	text-align: left;
-
-}
-
-.date {
-	font-size: 18px;
-	margin: 0 auto;
 	
+
 }
 
-.prec > a {
-	font-size: 14px;
-	color: #bbbaba;
+/*.arrow-right {
+  
 }
 
-.prec > a:hover {
-	color: #7f7e7e;
-}
+.arrow-left {
+  
+	}*/
+
+	.date, .appointment, .temp, .prec, .sunrise, .sunset {
+		font-size: 18px;
+		margin: 0 auto;
+		text-align: center;
+
+	}
+
+	.prec > a {
+		font-size: 14px;
+		color: #bbbaba;
+	}
+
+	.prec > a:hover {
+		color: #7f7e7e;
+	}

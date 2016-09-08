@@ -6,7 +6,7 @@ $(document).ready(function(){
 			$(".calendar-selection").show();
 			makeApiCall();
 		})
-		
+
 	})
 
 	function makeApiCall() {
@@ -33,81 +33,96 @@ $(document).ready(function(){
 				orderBy: 'startTime',
 			}
 		}).then(function(resp){
-			console.log(resp);
-			events = resp.result.items;
-			showEvents();
-		}, function(reason) {
-			console.log(reason);
-		})
+		//console.log(resp);
+		events = resp.result.items;
+		getWeather();
+	}, function(reason) {
+		console.log(reason);
+	})
 	}
 
 	function showEvents (){
+		 	$('.js-appt').html("<p>" + moment(getEventDate()).format('dddd, MM/DD/YY, HH:mm') + " - " + events[currentEvent].summary  + "</p>");
+		
+	}
+
+	function getEventDate (){
 		if (!events[currentEvent].start.dateTime) {
-			$('.js-appt').html("<p>" + events[currentEvent].start.date + " - " + events[currentEvent].summary  + "</p>");
+			 return new Date(events[currentEvent].start.date).toISOString().slice(0,-5); 
 		} else {
-			$('.js-appt').html("<p>" + events[currentEvent].start.dateTime + " - " + events[currentEvent].summary + "</p>");
+			return events[currentEvent].start.dateTime;
 		}
 	}
 
+$("#next-button").on("click", function(){
+	currentEvent = currentEvent + 1;
+	getWeather();
+})
 
-	//function showCalendarData(resp){
-
-	//}
-	
-	
-
-	$("#next-button").on("click", function(){
-		currentEvent = currentEvent + 1;
-		showEvents();
-	})
-	
-	$("#previous-button").on("click", function(){
-		currentEvent = currentEvent - 1;
-		showEvents();
-	})
+$("#previous-button").on("click", function(){
+	currentEvent = currentEvent - 1;
+	getWeather();
+})
 
 
-	$(".calendar-choices").on("click", ".calendar-link", function(){
-		$(".calendar-selection").hide();
-		$(".calendar-view").show();
-		getCalendarEvents($(this).data("id"));
+$(".calendar-choices").on("click", ".calendar-link", function(){
+	$(".calendar-selection").hide();
+	$(".calendar-view").show();
+	getCalendarEvents($(this).data("id"));
 
 
-	})
-	if ("geolocation" in navigator) {
-		navigator.geolocation.getCurrentPosition(function(position) {
-			console.log(position);
+})
 
-		});
-	}
+var latitude;
+var longitude;
 
+if ("geolocation" in navigator) {
+	navigator.geolocation.getCurrentPosition(function(position) {
+		console.log(position);
+		latitude = position.coords.latitude;
+		longitude = position.coords.longitude;
+	});
+}
+
+function getWeather(){
+	var eventDate = getEventDate();
+	console.log(eventDate);
 	$.ajax({
-		url: 'https://api.forecast.io/forecast/d299977ab42174cd2e68b01aa3257fc5/37.8267,-122.423,2016-09-10T12:00:00-0400',
+		url: 'https://api.forecast.io/forecast/1c97c1a55e35b5e41528f7a66520f182/' + latitude + ',' + longitude + ',' + eventDate,
 		dataType: 'jsonp'
 	}).done(function(data) {
+		showEvents();
 		console.log(data);
+		var tempInfo = data.daily.data[0];
+		$('.temp').html("<p>" + "Temperature: " + data.currently.temperature + "</p>");
+		$('.temp-min').html("<p>" + "Min" + " " + tempInfo.temperatureMin + "- Max:" + " " +tempInfo.temperatureMax +  "</p>");
+		$('.forecast').html("<p>" + tempInfo.icon + "</p>");
+		$('.prec').html("<p>" + "Prec:" + data.currently.precipProbability + "%" + "</p>");
+		$('.sunrise').html("<p>" + "Sunrise: " + moment.unix(tempInfo.sunriseTime).format("hh:mm a") + "</p>");
+		$('.sunset').html("<p>" + "Sunset: " + moment.unix(tempInfo.sunsetTime).format("hh:mm a") + "</p>"); 
 	})
+}
 
-	$(".js-logout").click(function(){
-		$(".calendar-selection").hide();
-		$(".splash-screen").show();
-	})
+$(".js-logout").click(function(){
+	$(".calendar-selection").hide();
+	$(".splash-screen").show();
+})
 
 
-	$(".js-changecalendar").click(function(){
-		$(".calendar-view").hide();
-		$(".calendar-selection").show();
-	})
+$(".js-changecalendar").click(function(){
+	$(".calendar-view").hide();
+	$(".calendar-selection").show();
+})
 
-	function onLoadFn(){
-		gapi.client.setApiKey('AIzaSyCX5Zh7ZtlaU2mvksDKQe5Z_njZ-zc7Mdo');
-		gapi.auth2.init({
-			client_id: '963904802029-arblg7v5te79ao18cqjc6006mr6scsmo.apps.googleusercontent.com',
-			scope: 'https://www.googleapis.com/auth/calendar.readonly'
-		});
-	}
+function onLoadFn(){
+	gapi.client.setApiKey('AIzaSyCX5Zh7ZtlaU2mvksDKQe5Z_njZ-zc7Mdo');
+	gapi.auth2.init({
+		client_id: '963904802029-arblg7v5te79ao18cqjc6006mr6scsmo.apps.googleusercontent.com',
+		scope: 'https://www.googleapis.com/auth/calendar.readonly'
+	});
+}
 
-	gapi.load("client:auth2", onLoadFn);
+gapi.load("client:auth2", onLoadFn);
 })
 
 
