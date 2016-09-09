@@ -2,6 +2,11 @@
 	font-family: 'Bitter', serif;
 }
 
+.loading{
+	text-align: center;
+	display: none;
+}
+
 /************ Splash Screen ************/
 
 .splash-screen > .login {
@@ -17,12 +22,7 @@
 	background-color: #dc4532;
 }
 
-.image {
-	content: url('images/weatherapplogo2.jpg');
-	max-width: 500px;
-	margin: 0 auto;
 
-}
 
 
 
@@ -41,59 +41,69 @@
 .calendar-view {
 	display:none;
 	text-align: center;
-}
-
-#previous-button {
-	display: inline-block;
-	position: relative;
-	width: 0; 
-	height: 0; 
-	border-top: 10px solid transparent;
-	border-bottom: 10px solid transparent; 
-
-	border-right:10px solid black; 
-}
-
-#next-button {
-	display: inline-block;
-	position: relative;
-	width: 0; 
-	height: 0; 
-	border-top: 10px solid transparent;
-	border-bottom: 10px solid transparent;
-
-	border-left: 10px solid black;
-}
-
-.sm-image {
-	content: url('images/weatherapplogo2.jpg');
-	max-height: 200px;
-	max-width: 200px;
-	text-align: left;
 	
 
 }
 
-/*.arrow-right {
-  
+#previous-button {
+	display: inline-block; 
+	height: 0;
+	width: 0; 
+	border-style: solid;
+	border-width: 17.5px 30.3px 17.5px 0;
+	border-color: white #050505 white white;
+	cursor: pointer; 
+	
 }
 
-.arrow-left {
-  
-	}*/
+#next-button {
+	display: inline-block;
+	height: 0;
+	width: 0; 
+	border-style: solid;
+	border-width: 17.5px 0 17.5px 30.3px;
+	border-color: white white white #050505;
+	cursor: pointer;
+	
+}
 
-	.date, .appointment, .temp, .prec, .sunrise, .sunset {
-		font-size: 18px;
-		margin: 0 auto;
-		text-align: center;
+.sm-image {
+	display: block;
+	max-height: 200px;
+	max-width: 200px;
+	margin: 0 auto;
+	
 
-	}
+}
 
-	.prec > a {
-		font-size: 14px;
-		color: #bbbaba;
-	}
+.weather-info {
+	border: 2px solid black;
+	width: 15em;
+	margin: 0 auto;
+	padding: 2em;
+}
 
-	.prec > a:hover {
-		color: #7f7e7e;
-	}
+.js-appt {
+	display: inline-block;
+	margin: 0 auto;
+	text-align: center;
+	color: #156aeb;
+	font-size: 20px;
+	
+}
+
+.date, .appointment, .temp, .prec, .sunrise, .sunset {
+	font-size: 18px;
+	margin: 0 auto;
+	text-align: center;
+
+}
+
+.prec > a {
+	font-size: 14px;
+	color: #bbbaba;
+}
+
+.prec > a:hover {
+	color: #7f7e7e;
+}

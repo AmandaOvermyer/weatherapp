@@ -7,37 +7,42 @@
 	<link href="https://fonts.googleapis.com/css?family=Bitter" rel="stylesheet">
 </head>
 <body>
-<div class ="splash-screen">
-	<div class="image"></div>
-	<button class="login js-login">Log In</button>
-</div>
+	<header>
+		<img src="css/images/weatherapplogo2.jpg" class="sm-image" alt="google weather app logo">
+	</header>
+	<div class="loading">
+		<img src="css/images/ajax-loader.gif">
+	</div>
+	<div class ="splash-screen">
+		<button class="login js-login">Log In</button>
+	</div>
 
-<div class="calendar-selection">Calendar Selection
-	<div class="calendar-choices"></div>
-	
-	<button class="logout js-logout">Log out</button>
+	<div class="calendar-selection">Calendar Selection
+		<div class="calendar-choices"></div>
 
-</div>
+		<button class="logout js-logout">Log out</button>
+
+	</div>
 
 
 
-<div class="calendar-view">
-	<img class="sm-image" alt="google weather app logo">
-	<button type="button" id="previous-button"></button>
-	<div class="appointment js-appt"></div>
-	<button type="button" id="next-button"></button>
-
-	<div class="temp"></div>
-	<div class="temp-min"></div>
-	<div class="forecast"></div>
-	<div class="prec">Prec:<a href="">Hourly View</a></div>
-	<div class="sunrise">Sunrise: </div>
-	<div class="sunset">Sunset:</div>
-	<button class="changecalendar js-changecalendar">Change Calendar</button>
-</div>
-<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>	
-<script src=https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js></script>
-<script src="https://apis.google.com/js/api.js"></script>
-<script src="js/app.js"></script>
+	<div class="calendar-view">
+		<div id="previous-button"></div>
+		<div class="appointment js-appt"></div>
+		<div id="next-button"></div>
+		<div class="weather-info">
+			<div class="temp"></div>
+			<div class="temp-min"></div>
+			<div class="forecast"></div>
+			<div class="prec">Prec:<a href="">Hourly View</a></div>
+			<div class="sunrise">Sunrise: </div>
+			<div class="sunset">Sunset:</div>
+			<button class="changecalendar js-changecalendar">Change Calendar</button>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>	
+	<script src=https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js></script>
+	<script src="https://apis.google.com/js/api.js"></script>
+	<script src="js/app.js"></script>
 </body>
 </html>

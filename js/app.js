@@ -1,58 +1,90 @@
 $(document).ready(function(){
 
-	$(".js-login").click(function(){
-		gapi.auth2.getAuthInstance().signIn().then(function(){
-			$(".splash-screen").hide();
-			$(".calendar-selection").show();
-			makeApiCall();
-		})
-
-	})
-
-	function makeApiCall() {
-		gapi.client.request({
-			'path': '/calendar/v3/users/me/calendarList',
-		}).then(function(resp) {
-			for (var i=0; i < resp.result.items.length; i++) {
-				var calendar = resp.result.items[i];
-				$('.calendar-choices').append("<p><a class='calendar-link' href='#' data-id='"+ calendar.id +"'>" +  calendar.summary + "</a></p>");
-			}
-		}, function(reason) {
-			console.log('Error: ' + reason.result.error.message);
-		})
-	}
-	var events; 
-	var currentEvent = 0;
-
-	function getCalendarEvents(calendarId){
-		gapi.client.request({
-			'path': '/calendar/v3/calendars/' + calendarId +'/events',
-			'params': {
-				timeMin: new Date().toISOString(),
-				singleEvents: true,
-				orderBy: 'startTime',
-			}
-		}).then(function(resp){
-		//console.log(resp);
-		events = resp.result.items;
-		getWeather();
-	}, function(reason) {
-		console.log(reason);
-	})
-	}
-
-	function showEvents (){
-		 	$('.js-appt').html("<p>" + moment(getEventDate()).format('dddd, MM/DD/YY, HH:mm') + " - " + events[currentEvent].summary  + "</p>");
+function onLoadFn(){
+	gapi.client.setApiKey('AIzaSyCX5Zh7ZtlaU2mvksDKQe5Z_njZ-zc7Mdo');
+	gapi.auth2.init({
+		client_id: '963904802029-arblg7v5te79ao18cqjc6006mr6scsmo.apps.googleusercontent.com',
+		scope: 'https://www.googleapis.com/auth/calendar.readonly',
+		cookiepolicy: 'single_host_origin'
+	}).then(function(){
+		gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+		updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
 		
-	}
+	});
+}
 
-	function getEventDate (){
-		if (!events[currentEvent].start.dateTime) {
-			 return new Date(events[currentEvent].start.date).toISOString().slice(0,-5); 
-		} else {
-			return events[currentEvent].start.dateTime;
-		}
+$(".js-login").click(function(){
+	gapi.auth2.getAuthInstance().signIn().then(function(){
+		$(".splash-screen").hide();
+		makeApiCall();
+	})
+
+})
+
+function updateSigninStatus(isSignedIn) {
+	if (isSignedIn){
+		$(".splash-screen").hide();
+		$(".calendar-selection").show();
+		
+	} else {
+		$(".calendar-selection").hide();
+		$(".splash-screen").show();
 	}
+}
+
+$(".js-logout").click(function(){
+	gapi.auth2.getAuthInstance().signOut();
+	$('.calendar-choices').empty();
+})
+
+function makeApiCall() {
+	$('.loading').show();
+	gapi.client.request({
+		'path': '/calendar/v3/users/me/calendarList',
+	}).then(function(resp) {
+		$('.loading').hide();
+		$(".calendar-selection").show();
+		for (var i=0; i < resp.result.items.length; i++) {
+			var calendar = resp.result.items[i];
+			$('.calendar-choices').append("<p><a class='calendar-link' href='#' data-id='"+ calendar.id +"'>" +  calendar.summary + "</a></p>");
+		}
+	}, function(reason) {
+		alert('Error: ' + reason.result.error.message);
+	})
+}
+var events; 
+var currentEvent = 0;
+
+function getCalendarEvents(calendarId){
+	console.log(calendarId);
+	gapi.client.request({
+		'path': '/calendar/v3/calendars/' + encodeURIComponent(calendarId) +'/events',
+		'params': {
+			timeMin: new Date().toISOString(),
+			singleEvents: true,
+			orderBy: 'startTime',
+		}
+	}).then(function(resp){
+	//console.log(resp);
+	events = resp.result.items;
+	getWeather();
+}, function(reason) {
+	console.log(reason);
+})
+}
+
+function showEvents (){
+	$('.js-appt').html("<p>" + moment(getEventDate()).format('dddd, MM/DD/YY, HH:mm a') + "<br>" + events[currentEvent].summary  + "</p>");
+
+}
+
+function getEventDate (){
+	if (!events[currentEvent].start.dateTime) {
+		return new Date(events[currentEvent].start.date).toISOString().slice(0,-5); 
+	} else {
+		return events[currentEvent].start.dateTime;
+	}
+}
 
 $("#next-button").on("click", function(){
 	currentEvent = currentEvent + 1;
@@ -67,7 +99,7 @@ $("#previous-button").on("click", function(){
 
 $(".calendar-choices").on("click", ".calendar-link", function(){
 	$(".calendar-selection").hide();
-	$(".calendar-view").show();
+	$(".loading").show();
 	getCalendarEvents($(this).data("id"));
 
 
@@ -91,6 +123,8 @@ function getWeather(){
 		url: 'https://api.forecast.io/forecast/1c97c1a55e35b5e41528f7a66520f182/' + latitude + ',' + longitude + ',' + eventDate,
 		dataType: 'jsonp'
 	}).done(function(data) {
+		$(".calendar-view").show();
+		$(".loading").hide();
 		showEvents();
 		console.log(data);
 		var tempInfo = data.daily.data[0];
@@ -103,10 +137,7 @@ function getWeather(){
 	})
 }
 
-$(".js-logout").click(function(){
-	$(".calendar-selection").hide();
-	$(".splash-screen").show();
-})
+
 
 
 $(".js-changecalendar").click(function(){
@@ -114,13 +145,7 @@ $(".js-changecalendar").click(function(){
 	$(".calendar-selection").show();
 })
 
-function onLoadFn(){
-	gapi.client.setApiKey('AIzaSyCX5Zh7ZtlaU2mvksDKQe5Z_njZ-zc7Mdo');
-	gapi.auth2.init({
-		client_id: '963904802029-arblg7v5te79ao18cqjc6006mr6scsmo.apps.googleusercontent.com',
-		scope: 'https://www.googleapis.com/auth/calendar.readonly'
-	});
-}
+
 
 gapi.load("client:auth2", onLoadFn);
 })
