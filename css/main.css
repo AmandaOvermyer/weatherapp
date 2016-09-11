@@ -77,6 +77,7 @@
 }
 
 .weather-info {
+	position: relative;
 	border: 2px solid black;
 	width: 15em;
 	margin: 0 auto;
@@ -92,6 +93,58 @@
 	
 }
 
+.forecast{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 60px;
+	height: 60px;
+	background: url("images/all.jpg");
+}
+
+.forecast.-clear-day {
+	background-position: 0 0;
+  background-size:420%;
+}
+
+.forecast.-partly-cloudy-day {
+  background-position: 33% 0;
+  background-size:400%;
+}
+
+.forecast.-rain {
+  background-position: 0 29%;
+  background-size:400%;
+}
+
+.forecast.-snow {
+  background-position: 100% 29%;
+  background-size:420%;
+}
+.forecast.-clear-night {
+	background-position: 0 76%;
+	background-size: 420%;
+}
+
+.forecast.-wind {
+	background-position: 28% 100%;
+	background-size: 460%;
+}
+
+.forecast.-cloudy{
+	background-position:32% 55%;
+	background-size: 410%;
+}
+
+.forecast.-partly-cloudy-night {
+	background-position: 29%  76%;
+	background-size: 420%;
+}
+
+.forecast.-sleet{
+	background-position: 100% 53%;
+	background-size: 420%;
+}
 .date, .appointment, .temp, .prec, .sunrise, .sunset {
 	font-size: 18px;
 	margin: 0 auto;
