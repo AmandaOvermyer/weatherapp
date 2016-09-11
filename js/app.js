@@ -1,6 +1,39 @@
 $(document).ready(function(){
 
+	gapi.load("client:auth2", onLoadFn);
+
+	function startGeoLookup() {
+			navigator.geolocation.getCurrentPosition(handleGeoLookup);
+				$('.loading').show();
+
+		}
+
+	function handleGeoLookup(position, showError){
+		$('.loading').hide();
+		latitude = position.coords.latitude;
+		longitude = position.coords.longitude;
+		console.log(position);
+	}
+
+	function showError(error) {
+		switch(error.code){
+			case error.PERMISSION_DENIED:
+				alert("User denied the request for Geolocation.")
+				break;
+			case error.POSITION_UNAVAILABLE:
+				alert("Location information is unavailable.")
+				break;
+			case error.TIMEOUT:
+				alert("The request to get user location timed out.")
+				break;
+			case error.UNKNOWN_ERROR:
+				alert("An unknonw error occurred.")
+				break;
+		}
+	}
+
 	function onLoadFn(){
+		startGeoLookup();
 		gapi.client.setApiKey('AIzaSyCX5Zh7ZtlaU2mvksDKQe5Z_njZ-zc7Mdo');
 		gapi.auth2.init({
 			client_id: '963904802029-arblg7v5te79ao18cqjc6006mr6scsmo.apps.googleusercontent.com',
@@ -13,8 +46,22 @@ $(document).ready(function(){
 		});
 	}
 
+	$(".js-login").click(function(){
+		gapi.auth2.getAuthInstance().signIn().then(function(){
+			$(".splash-screen").hide();
+		})
+	})
 	
-	
+
+	function getLocation(){
+		if ("geolocation" in navigator) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				console.log(position);
+				latitude = position.coords.latitude;
+				longitude = position.coords.longitude;
+			});
+		}
+	}
 	function updateSigninStatus(isSignedIn) {
 		if (isSignedIn){
 			$(".splash-screen").hide();
@@ -70,8 +117,7 @@ $(document).ready(function(){
 	}
 
 	function showEvents (){
-		$('.js-appt').html("<p>" + moment(getEventDate()).format('dddd, MM/DD/YY, HH:mm a') + "<br>" + events[currentEvent].summary  + "</p>");
-
+		$('.js-appt').html("<p>" + moment(getEventDate()).format('dddd, MM/DD/YY, hh:mm a') + "<br>" + events[currentEvent].summary  + "</p>");
 	}
 
 	function getEventDate (){
@@ -85,6 +131,7 @@ $(document).ready(function(){
 	$("#next-button").on("click", function(){
 		currentEvent = currentEvent + 1;
 		getWeather();
+
 	})
 
 	$("#previous-button").on("click", function(){
@@ -120,16 +167,15 @@ $(document).ready(function(){
 			var tempInfo = data.daily.data[0];
 			$('.temp').html("<p>" + "Temperature: " + data.currently.temperature + "</p>");
 			$('.temp-min').html("<p>" + "Min" + " " + tempInfo.temperatureMin + "- Max:" + " " +tempInfo.temperatureMax +  "</p>");
+			$('.forecast').attr('class', 'forecast');
 			$('.forecast').addClass("-" + tempInfo.icon);
 			console.log(tempInfo.icon);
 			$('.summary').html("<p>" + "Summary: " + tempInfo.summary + "</p>");
-			$('.prec').html("<p>" + "Prec:" + tempInfo.precipProbability + "%" + "</p>");
+			$('.prec').html("<p>" + "Prec: " + (tempInfo.precipProbability *100) + "%" + "</p>");
 			$('.sunrise').html("<p>" + "Sunrise: " + moment.unix(tempInfo.sunriseTime).format("hh:mm a") + "</p>");
 			$('.sunset').html("<p>" + "Sunset: " + moment.unix(tempInfo.sunsetTime).format("hh:mm a") + "</p>"); 
 		})
 	}
-
-
 
 
 	$(".js-changecalendar").click(function(){
@@ -138,21 +184,7 @@ $(document).ready(function(){
 	})
 
 	
-	if ("geolocation" in navigator) {
-		navigator.geolocation.getCurrentPosition(function(position) {
-			console.log(position);
-			latitude = position.coords.latitude;
-			longitude = position.coords.longitude;
-			gapi.load("client:auth2", onLoadFn);
-			$(".js-login").click(function(){
-				gapi.auth2.getAuthInstance().signIn().then(function(){
-					$(".splash-screen").hide();
-
-				})
-
-			})
-		});
-	}
+	
 	
 })
 
