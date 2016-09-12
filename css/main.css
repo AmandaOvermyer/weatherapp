@@ -24,7 +24,12 @@
 
 
 
-
+.splash-screen > p {
+	max-width: 200px;
+	text-align: center;
+	margin: 0 auto;
+	padding: 30px;
+}
 
 
 /*********** Calendar Selection ************/
