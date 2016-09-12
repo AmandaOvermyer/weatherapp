@@ -51,8 +51,7 @@
 }
 
 #previous-button {
-	display:none;
-	display: inline-block; 
+	display:none; 
 	height: 0;
 	width: 0; 
 	border-style: solid;

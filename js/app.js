@@ -14,7 +14,6 @@ $(document).ready(function(){
 		$('.js-login').show();
 		latitude = position.coords.latitude;
 		longitude = position.coords.longitude;
-		console.log(position);
 	}
 
 	function showError(error) {
@@ -58,7 +57,6 @@ $(document).ready(function(){
 	function getLocation(){
 		if ("geolocation" in navigator) {
 			navigator.geolocation.getCurrentPosition(function(position) {
-				console.log(position);
 				latitude = position.coords.latitude;
 				longitude = position.coords.longitude;
 			});
@@ -101,7 +99,6 @@ $(document).ready(function(){
 	var currentEvent = 0;
 
 	function getCalendarEvents(calendarId){
-		console.log(calendarId);
 		gapi.client.request({
 			'path': '/calendar/v3/calendars/' + encodeURIComponent(calendarId) +'/events',
 			'params': {
@@ -110,7 +107,7 @@ $(document).ready(function(){
 				orderBy: 'startTime',
 			}
 		}).then(function(resp){
-		//console.log(resp);
+		
 		events = resp.result.items;
 		getWeather();
 	}, function(reason) {
@@ -120,6 +117,14 @@ $(document).ready(function(){
 
 	function showEvents (){
 		$('.js-appt').html("<p>" + moment(getEventDate()).format('dddd, MM/DD/YY, hh:mm a') + "<br>" + events[currentEvent].summary  + "</p>");
+	}
+
+	function showPrevious(){
+		if (currentEvent > 0) {
+			$('#previous-button').css('display', 'inline-block');
+		} else {
+			$('#previous-button').css('display', 'none');
+		}
 	}
 
 	function getEventDate (){
@@ -132,12 +137,14 @@ $(document).ready(function(){
 
 	$("#next-button").on("click", function(){
 		currentEvent = currentEvent + 1;
+		showPrevious();
 		getWeather();
 
 	})
 
 	$("#previous-button").on("click", function(){
 		currentEvent = currentEvent - 1;
+		showPrevious();
 		getWeather();
 	})
 
@@ -157,7 +164,6 @@ $(document).ready(function(){
 
 	function getWeather(){
 		var eventDate = getEventDate();
-		console.log(eventDate);
 		$.ajax({
 			url: 'https://api.forecast.io/forecast/1c97c1a55e35b5e41528f7a66520f182/' + latitude + ',' + longitude + ',' + eventDate,
 			dataType: 'jsonp'
@@ -165,13 +171,11 @@ $(document).ready(function(){
 			$(".calendar-view").show();
 			$(".loading").hide();
 			showEvents();
-			console.log(data);
 			var tempInfo = data.daily.data[0];
 			$('.temp').html("<p>" + "Temperature: " + data.currently.temperature + "</p>");
 			$('.temp-min').html("<p>" + "Min" + " " + tempInfo.temperatureMin + "- Max:" + " " +tempInfo.temperatureMax +  "</p>");
 			$('.forecast').attr('class', 'forecast');
 			$('.forecast').addClass("-" + tempInfo.icon);
-			console.log(tempInfo.icon);
 			$('.summary').html("<p>" + "Summary: " + tempInfo.summary + "</p>");
 			$('.prec').html("<p>" + "Prec: " + (tempInfo.precipProbability *100) + "%" + "</p>");
 			$('.sunrise').html("<p>" + "Sunrise: " + moment.unix(tempInfo.sunriseTime).format("hh:mm a") + "</p>");
