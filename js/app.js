@@ -5,11 +5,13 @@ $(document).ready(function(){
 	function startGeoLookup() {
 			navigator.geolocation.getCurrentPosition(handleGeoLookup);
 				$('.loading').show();
+				$('.js-login').hide();
 
 		}
 
 	function handleGeoLookup(position, showError){
 		$('.loading').hide();
+		$('.js-login').show();
 		latitude = position.coords.latitude;
 		longitude = position.coords.longitude;
 		console.log(position);
